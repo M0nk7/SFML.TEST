@@ -4,11 +4,11 @@ Shuriken::Shuriken(sf::Texture* texture, sf::Vector2u imageCount, float switchTi
 animation(texture, imageCount, switchTime)
 {
 
-	body.setSize(size);
-	body.setOrigin(size / 2.0f);
-	body.setTexture(texture);
-	body.setPosition(sf::Vector2f(randx,0));
-	body.setFillColor(sf::Color::Red);
+	this->body.setSize(size);
+	this->body.setOrigin(size / 2.0f);
+	this->body.setTexture(texture);
+	this->body.setPosition(sf::Vector2f(randx,0));
+	this->body.setFillColor(sf::Color::Red);
 	isDestroyBool = false;
 }
 Shuriken::~Shuriken()
