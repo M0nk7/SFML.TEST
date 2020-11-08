@@ -11,6 +11,7 @@ public:
 	void Update(float deltaTime);
 	void Draw(sf::RenderWindow& window);
 	void setDestroy(bool isDestroyBool);
+	void GetGlobalBouns() { body.getGlobalBounds(); }
 	bool isDestroy() { return isDestroyBool; }
 	sf::Vector2f GetPosition() { return	body.getPosition(); }
 	Collider GetCollider() { return Collider(body); }

@@ -19,6 +19,7 @@ public:
 	float maxStamina = 30;
 	bool faceRight;
 	float drag = 0.97;
+	
 
 private:
 	sf::RectangleShape body;

@@ -19,6 +19,7 @@ Player::~Player()
 
 void Player::Update(float deltaTime)
 {
+	
 	row = 0;
 	if (stamina <= 0)
 	{
@@ -31,13 +32,13 @@ void Player::Update(float deltaTime)
 		{
 			velocity.x -= speed;
 			stamina -= 1;
-			speedMaxX = 600;
+			speedMaxX = 650;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
 		{
 			velocity.x += speed;
 			stamina -= 1;
-			speedMaxX = 600;
+			speedMaxX = 650;
 		}
 	}
 	if (stamina < maxStamina && !sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)&& canJump == true)
@@ -96,7 +97,10 @@ void Player::Update(float deltaTime)
 			velocity.x = speedMaxX;
 		}
 	}
+
 	velocity.x *= drag;
+	
+
 	if (abs(velocity.x) < 20)
 	{
 		velocity.x = 0;
@@ -108,7 +112,7 @@ void Player::Update(float deltaTime)
 
 void Player::Draw(sf::RenderWindow& window)
 {
-	if(immortal)window.draw(body);
+	window.draw(body);
 }
 
 void Player::OnCollision(sf::Vector2f direction)

@@ -1,6 +1,6 @@
 #include "Shuriken.h"
 #include "Animation.h"
-Shuriken::Shuriken(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f size,float randx):
+Shuriken::Shuriken(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f size, float randx):
 animation(texture, imageCount, switchTime)
 {
 
