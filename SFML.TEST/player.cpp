@@ -9,9 +9,12 @@ Player::Player(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, 
 
 	this->body.setSize(sf::Vector2f(70.0f, 160.0f));
 	this->body.setOrigin(body.getSize() / 2.0f);
-	this->body.setPosition(960.0f, 500.0f);
+	this->body.setPosition(960.0f, 510.0f);
 	this->body.setTexture(texture);
 	
+	this->Box.setSize(sf::Vector2f(70.0f, 80.0f));
+	this->Box.setOrigin(Box.getSize() / 2.0f);
+	this->Box.setPosition(960.0f, 500.0f);
 }
 Player::~Player()
 {
@@ -19,7 +22,8 @@ Player::~Player()
 
 void Player::Update(float deltaTime)
 {
-	
+	printf("%d\n", checkS);
+	checkS = true;
 	row = 0;
 	if (stamina <= 0)
 	{
@@ -44,6 +48,12 @@ void Player::Update(float deltaTime)
 	if (stamina < maxStamina && !sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)&& canJump == true)
 	{
 		stamina += 0.2;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && canJump == true &&!sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		row = 3;
+		checkS = false;
+		faceRight = false;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
@@ -107,6 +117,7 @@ void Player::Update(float deltaTime)
 	}
 	animation.Update(row, deltaTime, faceRight);
 	body.setTextureRect(animation.uvRect);
+	Box.move(velocity * deltaTime);
 	body.move(velocity * deltaTime);
 }
 
@@ -139,4 +150,5 @@ void Player::OnCollision(sf::Vector2f direction)
 		velocity.y = 0.0f;
 	}
 }
+
 

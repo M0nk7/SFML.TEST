@@ -14,16 +14,18 @@ public:
 	void SetPosition(sf::Vector2f Position) { body.setPosition(Position); }
 	sf::Vector2f GetSize() { body.getSize(); }
 	sf::Vector2f GetPosition() {return	body.getPosition();}
-	Collider GetCollider() { return Collider(body); }
+	Collider GetCollider() {return Collider(body);}
+	Collider GetColliderBox() { return Collider(Box); }
 	float stamina = 0;		
 	float maxStamina = 30;
 	bool faceRight;
+	bool checkS;
 	float drag = 0.97;
 	
 
 private:
 	sf::RectangleShape body;
-	sf::RectangleShape bodyImmortal;
+	sf::RectangleShape Box;
 	Animation animation;
 	unsigned int row;
 	float speed = 100;

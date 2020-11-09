@@ -278,9 +278,14 @@ int main(){
 		}
 		else clockImmortal.restart();
 		Collider playerCollision = player.GetCollider();
+		Collider playerCollisionBox = player.GetColliderBox();
 		for (Platform& platform : platforms)
 		{
 			if (platform.GetCollider().CheckCollision(playerCollision, direction, 1.0f))
+			{
+				player.OnCollision(direction);
+			}
+			if (platform.GetCollider().CheckCollision(playerCollisionBox, direction, 1.0f))
 			{
 				player.OnCollision(direction);
 			}
@@ -316,7 +321,7 @@ int main(){
 		printText(sf::Vector2f(100, 50),std::to_string(Hp),24, window);
 		printText(sf::Vector2f(1645, 80), "LEVEL",28, window);
 		printText(sf::Vector2f(1780, 80), std::to_string(level),28, window);
-		printText(sf::Vector2f(100, 140),std::to_string(shuriken),24, window);
+		printText(sf::Vector2f(100, 140), std::to_string(shuriken), 24, window); 
 		if (player.GetPosition().y > 1500)
 		{
 			window.close();
@@ -346,19 +351,41 @@ sf::Vector2f Speed(float time)
 void playerCollisionItem(Player& vect, Item& Item, Collider col, sf::Vector2f direction)
 {
 	int randItem = rand() % 2;
-	if (vect.GetCollider().CheckCollision(col, direction, 1.0f))
+	if (vect.checkS)
 	{
-		Item.setDestroy(true);
-		switch (randItem)
+		if (vect.GetCollider().CheckCollision(col, direction, 1.0f))
 		{
-			case(0)://Hp
+			Item.setDestroy(true);
+			switch (randItem)
 			{
-				Hp += 1; break;
+				case(0)://Hp
+				{
+					Hp += 1; break;
+				}
+				case(1)://Immortal
+				{
+					immortal = false;
+				 	immortal = true; break;
+				}
 			}
-			case(1)://Immortal
+		}
+	}
+	else
+	{
+		if (vect.GetColliderBox().CheckCollision(col, direction, 1.0f))
+		{
+			Item.setDestroy(true);
+			switch (randItem)
 			{
-				immortal = false;
-				immortal = true; break;
+				case(0)://Hp
+				{
+					Hp += 1; break;
+				}
+				case(1)://Immortal
+				{
+					immortal = false;
+					immortal = true; break;
+				}
 			}
 		}
 	}
@@ -401,12 +428,24 @@ void playerCollisionShuriken(Player& vect, Shuriken& Shuriken, Collider col, sf:
 	
 	if (dead == 0 && immortal == false)
 	{
-		if (vect.GetCollider().CheckCollision(col, direction, 1.0f))
-		{
-			Shuriken.setDestroy(true);
-			Hp--;
-			dead = 1;
+		if (vect.checkS) {
+			if (vect.GetCollider().CheckCollision(col, direction, 1.0f))
+			{
+				Shuriken.setDestroy(true);
+				Hp--;
+				dead = 1;
+			}
 		}
+		else
+		{
+			if (vect.GetColliderBox().CheckCollision(col, direction, 1.0f))
+			{
+				Shuriken.setDestroy(true);
+				Hp--;
+				dead = 1;
+			}
+		}
+		
 	}
 }
 void upDateShuriken(std::vector<Shuriken>& vest, float deltaTime)
