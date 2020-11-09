@@ -5,7 +5,7 @@
 class Shuriken
 {
 public:
-	Shuriken(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f size , float randx);
+	Shuriken(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f size, float randx, sf::Color color);
 	~Shuriken(); 
 
 	void OnCollision(sf::Vector2f direction);

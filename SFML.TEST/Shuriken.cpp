@@ -1,6 +1,6 @@
 #include "Shuriken.h"
 #include "Animation.h"
-Shuriken::Shuriken(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f size, float randx):
+Shuriken::Shuriken(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f size, float randx,sf::Color color):
 animation(texture, imageCount, switchTime)
 {
 
@@ -8,7 +8,7 @@ animation(texture, imageCount, switchTime)
 	this->body.setOrigin(size / 2.0f);
 	this->body.setTexture(texture);
 	this->body.setPosition(sf::Vector2f(randx,0));
-	this->body.setFillColor(sf::Color::Red);
+	this->body.setFillColor(color);
 	isDestroyBool = false;
 }
 Shuriken::~Shuriken()

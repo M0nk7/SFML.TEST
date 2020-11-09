@@ -14,8 +14,10 @@ void platformCollisionShuriken(std::vector<Platform>& vect, Shuriken& Shuriken, 
 void platformCollisionItem(std::vector<Platform>& vect, Item& Item, Collider col, sf::Vector2f direction);
 void playerCollisionShuriken(Player& vect, Shuriken& Shuriken, Collider col, sf::Vector2f direction);
 void upDateShuriken(std::vector<Shuriken>& vest, float deltaTime);
+void upDateShurikenV2(std::vector<Shuriken>& vest, float deltaTime);
 void upDateItem(std::vector<Item>& vest, float deltaTime);
 void moveShuriken(std::vector<Shuriken>& vest, sf::Vector2f move, float deltaTime);
+void moveShurikenV2(std::vector<Shuriken>& vest, sf::Vector2f move, float deltaTime);
 void drawShuriken(std::vector<Shuriken>& vest, sf::RenderWindow& window);
 void drawItem(std::vector<Item>& vest, sf::RenderWindow& window);
 void printText(sf::Vector2f postiton, std::string message, float size, sf::RenderWindow& window);
@@ -25,15 +27,22 @@ int score = 0;
 
 int shuriken = 0;
 int numshuriken = 2;
+
+int shurikenV2 = 0;
+int numshurikenV2 = 0;
+
 int Hp = 3;
 int item = -1;
 bool checkItme = false;
 bool immortal = false;
-bool checkDrag = false;
+bool checkTimeshurikenV2 = false;
 //dead
 float dead = 0;
 //move Shuriken
 sf::Vector2f move;
+
+float TimeMoveV2 = 0;
+sf::Clock clockMoveV2;
 
 int main(){
 	int level = 1;
@@ -47,6 +56,7 @@ int main(){
 	//vector
 	std::vector<Platform> platforms;
 	std::vector<Shuriken> shurikens;
+	std::vector<Shuriken> shurikenV2s;
 	std::vector<Item> items;
 
 	sf::Vector2f direction;
@@ -69,7 +79,7 @@ int main(){
 	sf::Texture deadpng;
 	sf::Texture protectpng;
 
-	protectpng.loadFromFile("png/protect1.png");
+	protectpng.loadFromFile("png/protect01.png");
 	immortalpng.loadFromFile("png/immortal.png");
 	Hppng.loadFromFile("png/heart.png");
 	itempng.loadFromFile("png/item.png");
@@ -85,7 +95,7 @@ int main(){
 	Animation playerdead(&deadpng, sf::Vector2u(4, 1), 0.3f);
 	shapeDead.setTexture(&deadpng);
 
-	Animation immAnima(&protectpng, sf::Vector2u(2, 1), 0.4f);
+	Animation immAnima(&protectpng, sf::Vector2u(3, 1), 0.2f);
 
 	immAS.setTexture(&protectpng);
 	bg01.setTexture(&bg01png);
@@ -95,8 +105,10 @@ int main(){
 	platforms.push_back(Platform(&platformpng, sf::Vector2f(1400.0f, 150.0f), sf::Vector2f(960.0f, 840.0f)));
 	
 	//timeclock
+
 	float deltaTime = 0.0f;
 	float shurikenTime = 0.0f;
+	float shurikenTimeV2 = 0.0f;
 	float TimeMove = 0;
 	float immortalTime = 0;
 	float flashingTime = 0;
@@ -107,6 +119,7 @@ int main(){
 
 	sf::Clock clock;
 	sf::Clock clockShuriken;
+	sf::Clock clockShurikenV2;
 	sf::Clock clockMove;
 	sf::Clock clockImmortal;
 	sf::Clock clockDeadImmortal;
@@ -117,8 +130,11 @@ int main(){
 
 	while (window.isOpen())
 	{
+		TimeMoveV2 = clockMoveV2.getElapsedTime().asMilliseconds();
+
 		timeLevel = clockLevel.getElapsedTime().asSeconds();
 		shurikenTime = clockShuriken.getElapsedTime().asMilliseconds();
+		shurikenTimeV2 = clockShurikenV2.getElapsedTime().asMilliseconds();
 		TimeMove = clockMove.getElapsedTime().asMilliseconds();
 		deadImmortalTime = clockDeadImmortal.getElapsedTime().asMilliseconds();
 		immortalTime = clockImmortal.getElapsedTime().asMilliseconds();
@@ -149,38 +165,63 @@ int main(){
 			move.x += 25;
 			level++;
 			clockLevel.restart();
+			if (level % 3 == 0)
+			{
+				numshurikenV2++;
+			}
 			if (level % 5 == 0)
 			{
 				numshuriken++;
 			}
+			
 		}
 		
 		upDateItem(items, deltaTime);
 		upDateShuriken(shurikens, deltaTime);
+		upDateShurikenV2(shurikenV2s, deltaTime);
 		moveShuriken(shurikens,Speed(TimeMove), deltaTime);
+		moveShurikenV2(shurikenV2s, sf::Vector2f(0,1500), deltaTime);
 		int ran = rand() % 3;
 		int ranm = 0;
 		if (ran == 2) ranm = 150;
 		else if (ran == 1) ranm = 0;
 		else ranm = -150;
-
+		std::cout << TimeMoveV2 << std::endl;
 		int ranItem = rand() % 1920;
 
 		if (shuriken < numshuriken)
 		{
 			if (shurikenTime > 800)
 			{
-				shurikens.push_back(Shuriken(&shurikenpng, sf::Vector2u(8, 1), 0.0001, sf::Vector2f(80, 80), player.GetPosition().x + ranm));
+				shurikens.push_back(Shuriken(&shurikenpng, sf::Vector2u(8, 1), 0.0001, sf::Vector2f(80, 80), player.GetPosition().x + ranm,sf::Color::Green));
 				shuriken++;
 				score++;
 				clockShuriken.restart();
 			}
 		}
-		for (int i = 0; i < shurikens.size(); i++)
+		if (shurikenTimeV2 > 2000)
 		{
+			for (int i = 0; i < numshurikenV2; i++)
+			{
+				shurikenV2s.push_back(Shuriken(&shurikenpng, sf::Vector2u(8, 1), 0.0001, sf::Vector2f(80, 80),rand() % 1400 + 260,sf::Color::Yellow));
+				shurikenV2++;
+				score++;
+			}
+			clockMoveV2.restart();
+			clockShurikenV2.restart();	
+		}
+		
+		for (int i = 0; i < shurikens.size(); i++)
+		{ 
 			Collider temp = shurikens[i].GetCollider();
 			platformCollisionShuriken(platforms, shurikens[i], temp, direction);
 			playerCollisionShuriken(player, shurikens[i], temp, direction);
+		}
+		for (int i = 0; i < shurikenV2s.size(); i++)
+		{
+			Collider temp = shurikenV2s[i].GetCollider();
+			platformCollisionShuriken(platforms, shurikenV2s[i], temp, direction);
+			playerCollisionShuriken(player, shurikenV2s[i], temp, direction);
 		}
 		//TimeRestart
 		if (TimeMove > 1500) clockMove.restart();
@@ -188,7 +229,7 @@ int main(){
 		if (Hp > 0) clockDead.restart();
 		if (dead == 1)
 		{
-			if (deadImmortalTime > 2000) {
+			if (deadImmortalTime > 1500) {
 				dead = 0;
 				clockDeadImmortal.restart();
 			}
@@ -218,13 +259,19 @@ int main(){
 					Collider temp = S.GetCollider();
 					if (immortalShape.GetCollider().CheckCollision(temp, direction, 1.0f))
 					S.setDestroy(true);
-
-					immAnima.Update(0,deltaTime,1);
-					immAS.setPosition(player.GetPosition());
-					immAS.setOrigin(110,110);
-					immAS.setTextureRect(immAnima.uvRect);
-					window.draw(immAS);
 				}
+				for (Shuriken& S : shurikenV2s)
+				{
+					Collider temp = S.GetCollider();
+					if (immortalShape.GetCollider().CheckCollision(temp, direction, 1.0f))
+						S.setDestroy(true);
+
+				}
+				immAnima.Update(0, deltaTime, 1);
+				immAS.setPosition(player.GetPosition());
+				immAS.setOrigin(110, 110);
+				immAS.setTextureRect(immAnima.uvRect);
+				window.draw(immAS);
 
 			}
 			else immortal = false;
@@ -242,6 +289,7 @@ int main(){
 			
 		drawItem(items, window);
 		drawShuriken(shurikens, window);
+		drawShuriken(shurikenV2s, window);
 		player.Update(deltaTime);
 
 		if (dead == 1) 
@@ -280,6 +328,7 @@ int main(){
 		if (Hp <= 0)
 		{ 
 			dead = 3;
+			immortal = false;
 		}
 
 		window.display();
@@ -308,6 +357,7 @@ void playerCollisionItem(Player& vect, Item& Item, Collider col, sf::Vector2f di
 			}
 			case(1)://Immortal
 			{
+				immortal = false;
 				immortal = true; break;
 			}
 		}
@@ -349,7 +399,7 @@ void platformCollisionItem(std::vector<Platform>& vect, Item& Item, Collider col
 void playerCollisionShuriken(Player& vect, Shuriken& Shuriken, Collider col, sf::Vector2f direction)
 {
 	
-	if (dead == 0) 
+	if (dead == 0 && immortal == false)
 	{
 		if (vect.GetCollider().CheckCollision(col, direction, 1.0f))
 		{
@@ -357,10 +407,6 @@ void playerCollisionShuriken(Player& vect, Shuriken& Shuriken, Collider col, sf:
 			Hp--;
 			dead = 1;
 		}
-	}
-	else
-	{
-		
 	}
 }
 void upDateShuriken(std::vector<Shuriken>& vest, float deltaTime)
@@ -375,6 +421,21 @@ void upDateShuriken(std::vector<Shuriken>& vest, float deltaTime)
 		{
 			vest.erase(vest.begin() + i);
 			shuriken--;
+		}
+	}
+}
+void upDateShurikenV2(std::vector<Shuriken>& vest, float deltaTime)
+{
+	for (Shuriken& Rocket : vest)
+	{
+		Rocket.Update(deltaTime);
+	}
+	for (int i = 0; i < vest.size(); i++)
+	{
+		if (vest[i].isDestroy())
+		{
+			vest.erase(vest.begin() + i);
+			shurikenV2--;
 		}
 	}
 }
@@ -401,6 +462,20 @@ void moveShuriken(std::vector<Shuriken>& vest, sf::Vector2f move, float deltaTim
 		if (Rocket.GetPosition().y > 1100)
 			Rocket.setDestroy(true);
 	}
+}
+void moveShurikenV2(std::vector<Shuriken>& vest, sf::Vector2f move, float deltaTime)
+{
+	
+	if (TimeMoveV2 > 500)
+	{
+		for (Shuriken& Rocket : vest)
+		{
+			Rocket.Move(move, deltaTime);
+			if (Rocket.GetPosition().y > 1100)
+				Rocket.setDestroy(true);
+		}
+	}
+	
 }
 void drawShuriken(std::vector<Shuriken>& vest, sf::RenderWindow& window)
 {
