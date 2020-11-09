@@ -22,39 +22,12 @@ Player::~Player()
 
 void Player::Update(float deltaTime)
 {
-	printf("%d\n", checkS);
+	speedMaxX = 400;
+	time = clock.getElapsedTime().asMilliseconds();
+	printf("   %.f\n", time);
 	checkS = true;
 	row = 0;
-	if (stamina <= 0)
-	{
-		speedMaxX = 400;
-	}
-	else
-	{
-		speedMaxX = 400;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-		{
-			velocity.x -= speed;
-			stamina -= 1;
-			speedMaxX = 650;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-		{
-			velocity.x += speed;
-			stamina -= 1;
-			speedMaxX = 650;
-		}
-	}
-	if (stamina < maxStamina && !sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)&& canJump == true)
-	{
-		stamina += 0.2;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && canJump == true &&!sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		row = 3;
-		checkS = false;
-		faceRight = false;
-	}
+	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		velocity.x -= speed;
@@ -79,21 +52,66 @@ void Player::Update(float deltaTime)
 		velocity.y = -sqrt(2.0f * 981.0f * jumpHeight);
 		
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && canJump == true && !sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		row = 3;
+		checkS = false;
+		faceRight = false;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)&& time > 800 && checkSlide)
+	{
+		checkS = false;
+		checkSlide = false;
+		faceRight = false;
+		velocity.x -= speedMaxX;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D) && time > 800 && checkSlide)
+	{
+		checkS = false;
+		checkSlide = false;
+		faceRight = true;
+		velocity.x += speedMaxX;
+	}
+	
+	
 	velocity.y += 1500.0f * deltaTime;
 	if (canJump == false)
 	{
-		if (velocity.x == 0.0f)
+	
+		row = 2;
+		if (velocity.x > 0.0f)
+			faceRight = true;
+		else
+			faceRight = false;
+	}
+	if (checkSlide == false)
+	{
+		row = 4;
+		if (stamina < 10)
 		{
-			row = 2;
+			if (velocity.x > 0.0f)
+			{
+				faceRight = true;
+				speedMaxX = 1100;
+				velocity.x += speedMaxX;
+
+			}
+
+			else
+			{
+				faceRight = false;
+				speedMaxX = 1100;
+				velocity.x -= speedMaxX;
+			}
+			stamina++;
 		}
 		else
 		{
-			row = 2;
-			if (velocity.x > 0.0f)
-				faceRight = true;
-			else
-				faceRight = false;
+			clock.restart();
+			stamina = 0;
+			checkSlide = true;
 		}
+			
 	}
 	
 	if (abs(velocity.x) > speedMaxX)

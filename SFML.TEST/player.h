@@ -17,9 +17,10 @@ public:
 	Collider GetCollider() {return Collider(body);}
 	Collider GetColliderBox() { return Collider(Box); }
 	float stamina = 0;		
-	float maxStamina = 30;
+	float maxStamina = 0;
 	bool faceRight;
 	bool checkS;
+	bool checkSlide;
 	float drag = 0.97;
 	
 
@@ -31,9 +32,10 @@ private:
 	float speed = 100;
 	float speedMaxX = 400;
 	
-	
 	sf::Vector2f velocity;
 	bool canJump;
 	float jumpHeight;
 
+	float time;
+	sf::Clock clock;
 };

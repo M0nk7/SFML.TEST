@@ -86,11 +86,11 @@ int main(){
 	shurikenpng.loadFromFile("png/shuriken.png");
 	bg01png.loadFromFile("png/bg04.png");
 	platformpng.loadFromFile("png/03.png");
-	playepng.loadFromFile("png/player06.png");
+	playepng.loadFromFile("png/player07.png");
 	deadpng.loadFromFile("png/dead.png");
 
 	//player
-	Player player(&playepng, sf::Vector2u(4, 4), 0.2f, 400.0f);
+	Player player(&playepng, sf::Vector2u(4, 5), 0.2f, 400.0f);
 	sf::RectangleShape shapeDead(sf::Vector2f(210, 170));
 	Animation playerdead(&deadpng, sf::Vector2u(4, 1), 0.3f);
 	shapeDead.setTexture(&deadpng);
@@ -162,7 +162,7 @@ int main(){
 		if (timeLevel > 10)
 		{
 			move.x += 25;
-			move.x += 25;
+			move.y += 25;
 			level++;
 			clockLevel.restart();
 			if (level % 3 == 0)
@@ -186,7 +186,7 @@ int main(){
 		if (ran == 2) ranm = 150;
 		else if (ran == 1) ranm = 0;
 		else ranm = -150;
-		std::cout << TimeMoveV2 << std::endl;
+		
 		int ranItem = rand() % 1920;
 
 		if (shuriken < numshuriken)
