@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="BlockAnimation.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
@@ -157,11 +158,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="BlockAnimation.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="Shuriken.h" />
+    <ClInclude Include="Textbox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

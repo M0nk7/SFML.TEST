@@ -15,6 +15,14 @@ Player::Player(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, 
 	this->Box.setSize(sf::Vector2f(70.0f, 80.0f));
 	this->Box.setOrigin(Box.getSize() / 2.0f);
 	this->Box.setPosition(960.0f, 500.0f);
+
+	soundb1.loadFromFile("sound/Jump.wav");
+	sound1.setBuffer(soundb1);
+	sound1.setVolume(5);
+
+	soundb2.loadFromFile("sound/Dash.wav");
+	sound2.setBuffer(soundb2);
+	sound2.setVolume(5);
 }
 Player::~Player()
 {
@@ -24,7 +32,6 @@ void Player::Update(float deltaTime)
 {
 	speedMaxX = 400;
 	time = clock.getElapsedTime().asMilliseconds();
-	printf("   %.f\n", time);
 	checkS = true;
 	row = 0;
 	
@@ -44,11 +51,13 @@ void Player::Update(float deltaTime)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)&& canJump)
 	{
 		canJump = false;
+		sound1.play();
 		velocity.y = -sqrt(2.0f * 981.0f * jumpHeight);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && canJump)
 	{
 		canJump = false;
+		sound1.play();
 		velocity.y = -sqrt(2.0f * 981.0f * jumpHeight);
 		
 	}
@@ -61,6 +70,7 @@ void Player::Update(float deltaTime)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)&& time > 800 && checkSlide)
 	{
 		checkS = false;
+		sound2.play();
 		checkSlide = false;
 		faceRight = false;
 		velocity.x -= speedMaxX;
@@ -68,6 +78,7 @@ void Player::Update(float deltaTime)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D) && time > 800 && checkSlide)
 	{
 		checkS = false;
+		sound2.play();
 		checkSlide = false;
 		faceRight = true;
 		velocity.x += speedMaxX;

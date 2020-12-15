@@ -1,5 +1,6 @@
 #pragma once
 #include<SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Animation.h"
 #include "Collider.h"
 class Player
@@ -11,7 +12,7 @@ public:
 	void Update(float deltaTime);
 	void Draw(sf::RenderWindow& window);
 	void OnCollision(sf::Vector2f direction);
-	void SetPosition(sf::Vector2f Position) { body.setPosition(Position); }
+	void SetPosition(sf::Vector2f Position) { body.setPosition(Position); Box.setPosition(Position.x, Position.y - 10); }
 	sf::Vector2f GetSize() { body.getSize(); }
 	sf::Vector2f GetPosition() {return	body.getPosition();}
 	Collider GetCollider() {return Collider(body);}
@@ -38,4 +39,11 @@ private:
 
 	float time;
 	sf::Clock clock;
+
+	sf::SoundBuffer soundb1;
+	sf::Sound sound1;
+
+	sf::SoundBuffer soundb2;
+	sf::Sound sound2;
+
 };

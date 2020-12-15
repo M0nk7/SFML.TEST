@@ -7,7 +7,7 @@ animation(texture, imageCount, switchTime)
 	this->body.setSize(size);
 	this->body.setOrigin(size / 2.0f);
 	this->body.setTexture(texture);
-	this->body.setPosition(sf::Vector2f(randx,0));
+	this->body.setPosition(sf::Vector2f(randx,-50));
 	this->body.setFillColor(color);
 	isDestroyBool = false;
 }
@@ -58,4 +58,8 @@ void Shuriken::Move(sf::Vector2f move_,float deltaTime)
 void Shuriken::setDestroy(bool isDestroyBool)
 {
 	this->isDestroyBool = isDestroyBool;
+}
+void Shuriken::magicMove(float deltaTime)
+{
+	body.move(move * deltaTime);
 }
